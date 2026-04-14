@@ -1,0 +1,27 @@
+---
+description: Approved stack — Next.js, Supabase, Stripe, Resend, Tailwind, shadcn/ui
+alwaysApply: true
+---
+
+# Stack and UI conventions
+
+## Core stack (use unless SPEC or user explicitly changes it)
+
+| Layer | Choice |
+|-------|--------|
+| Framework | **Next.js** (App Router), deploy on **Vercel** |
+| Data / auth / files | **Supabase** (Postgres, Auth, Storage, **RLS**) |
+| Payments | **Stripe** (EUR); webhooks in Route Handlers |
+| Email | **Resend** (transactional) |
+| Drops / queues | **Upstash** (Redis / QStash) per **SPEC.md** §5–6 |
+
+## UI
+
+- **Tailwind CSS** for styling.
+- **shadcn/ui** for accessible primitives (Button, Dialog, Form, etc.); extend patterns from existing components—avoid one-off raw HTML for complex controls when a shadcn pattern exists.
+- **Responsive first:** SPEC targets strong mobile and desktop; test layouts at common breakpoints.
+- **i18n:** Spanish and English on customer-facing surfaces per SPEC.
+
+## Integration discipline
+
+- **Stripe / Resend / Supabase service role** run **server-side only** (Route Handlers, Server Actions, server components that do not leak secrets). Follow the Cursor rule **secrets-environment**.

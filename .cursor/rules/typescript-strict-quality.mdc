@@ -1,0 +1,35 @@
+---
+description: TypeScript strict mode, explicit errors, small focused functions
+globs: "**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# TypeScript and code quality
+
+## Strict mode
+
+- Enable **`"strict": true`** in `tsconfig.json` (and related strict flags). No `@ts-ignore` unless unavoidable—pair with a short comment and a follow-up issue if suppressed.
+
+## Always handle errors explicitly
+
+- **No empty `catch` blocks.** Log or map to a typed error; return a safe result or rethrow.
+- For **async server** code (Server Actions, Route Handlers): catch expected failures (Stripe, Supabase, Resend), return structured errors or HTTP status codes; do not leak internal stack traces to clients.
+- For **UI**: surface user-actionable messages (toast / inline) for failures; loading and error states must be intentional, not silent `undefined`.
+
+```typescript
+// ❌ BAD
+try { await charge(); } catch { }
+
+// ✅ GOOD
+try {
+  await charge();
+} catch (err) {
+  console.error("charge_failed", err);
+  return { ok: false as const, error: "PAYMENT_FAILED" };
+}
+```
+
+## Small, focused functions
+
+- Prefer **one clear responsibility** per function; extract helpers when a function handles validation + I/O + mapping + UI concerns.
+- Name functions after **what they do** (verb phrases); keep files cohesive—split when a module grows hard to scan.

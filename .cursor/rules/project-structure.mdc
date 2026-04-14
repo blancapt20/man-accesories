@@ -1,0 +1,40 @@
+---
+description: Next.js App Router project layout for Marcus shop
+alwaysApply: true
+---
+
+# Project structure
+
+Use **App Router** under `src/app` (or `app/` at root if the repo already chose no `src`—stay consistent).
+
+## Suggested layout
+
+```
+src/
+  app/
+    (marketing)/          # landing, legal, cookie consent
+    (store)/              # catalog, product/[slug], cart, checkout
+    admin/                # SPEC: protected /admin/**
+    owner/                # SPEC: protected /owner/**
+    api/                  # Route Handlers: Stripe webhooks, etc.
+  components/
+    ui/                   # shadcn primitives (generated)
+    ...                   # feature components by domain
+  lib/
+    supabase/             # server, browser, middleware clients
+    stripe.ts             # server-only Stripe helpers
+    resend.ts             # server-only email helpers
+    utils.ts
+  types/                  # shared TS types (or colocate with features)
+```
+
+## Rules
+
+- **Colocate** route-specific components under the route folder when they are not reused.
+- **Shared domain logic** (pricing, cart rules, role checks) lives in `lib/` or small modules imported by Server Actions—**not** duplicated across pages.
+- **Webhooks** live under `app/api/.../route.ts` (or `src/app/api/...`) with **raw body** handling where Stripe requires it.
+- **Supabase migrations / SQL** in `supabase/migrations` if using Supabase CLI; keep RLS policies versioned with schema changes.
+
+## Auth and staff routes
+
+- Mirror **SPEC.md** §2.4: middleware or layout guards on **`/admin`**, **`/owner`**; re-check role in every mutating Server Action and sensitive Route Handler.

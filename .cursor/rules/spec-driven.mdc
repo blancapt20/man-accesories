@@ -1,0 +1,17 @@
+---
+description: Spec-driven development — SPEC.md is the source of truth
+alwaysApply: true
+---
+
+# Spec-driven development
+
+- Before implementing or changing **product behaviour**, **roles**, **data models**, **integrations**, or **MVP scope**, read and align with **`SPEC.md`** at the repository root.
+- When the user asks for a feature, **check which SPEC section** it belongs to (flows, data models, edge cases, success criteria). If the request **conflicts with SPEC**, flag it and ask for an explicit SPEC update rather than silently diverging.
+- After **stakeholder-approved** scope or behaviour changes, **update `SPEC.md`** in the same change set (or immediately after) so the spec stays authoritative.
+- **Out-of-scope** items in SPEC §7 must not be implemented unless the user explicitly expands scope and updates SPEC first.
+
+## Documentation management
+
+- **Do not** create new top-level markdown documents (READMEs, ADRs, guides) unless the **user asks** for them.
+- Keep **`README.md`** short: project name, how to run locally, link to **`SPEC.md`**, and where to find env vars (e.g. `.env.example`).
+- Prefer **updating `SPEC.md`** for product/architecture decisions; use code comments only for local, non-obvious invariants—not as a substitute for the spec.
